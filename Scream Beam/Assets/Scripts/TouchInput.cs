@@ -39,6 +39,11 @@ public class TouchInput : MonoBehaviour {
     public int Score = 0;
     private int highScore;
     public string playerName;
+
+    [Header("Pause Parameters")]
+    public Transform pauseMenuCanvas;
+    public bool isPaused;
+
     void Start()
     {
         timer = maxTimer;
@@ -100,6 +105,38 @@ public class TouchInput : MonoBehaviour {
                 timer = maxTimer;
             }
         }
+
+        //pause menu check for pc
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseSwitch();
+        }
+    }
+
+    public void PauseSwitch()
+    {
+        if(pauseMenuCanvas.gameObject.activeInHierarchy == true)
+        {
+            //if canvas active, toggle pause state off
+            pauseMenuCanvas.gameObject.SetActive(false);
+            Time.timeScale = 1;
+        }
+        else
+        {
+            pauseMenuCanvas.gameObject.SetActive(true);
+            Time.timeScale = 0;
+        }
+    }
+
+    public void ResumeGame()
+    {
+        pauseMenuCanvas.gameObject.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
     private void SpawnChoice()
     {
