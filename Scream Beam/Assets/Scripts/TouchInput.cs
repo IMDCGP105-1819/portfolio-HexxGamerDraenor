@@ -44,6 +44,9 @@ public class TouchInput : MonoBehaviour {
     public Transform pauseMenuCanvas;
     public bool isPaused;
 
+    private bool SFXToggled = false;
+    public AudioSource[] SFXSources;
+
     void Start()
     {
         timer = maxTimer;
@@ -59,6 +62,7 @@ public class TouchInput : MonoBehaviour {
         highScore = PlayerPrefs.GetInt("HighScore");
         playerName = GameObject.Find("GameController").GetComponent<MenuController>().playerName;
     }
+
     void Update() {
         //if score is beaten, apply new changes for later reference, save to PlayerPrefs
         if(Score > highScore)
@@ -138,6 +142,7 @@ public class TouchInput : MonoBehaviour {
     {
         Application.Quit();
     }
+
     private void SpawnChoice()
     {
         //check for a random spawn location
@@ -184,7 +189,10 @@ public class TouchInput : MonoBehaviour {
     public void Fire()
     {
         BeamRenderer.enabled = true;
-        audioSource.enabled = true;
+        if (SFXToggled == true)
+        {
+            audioSource.enabled = true;
+        }
         isFiring = true;
     }
 
@@ -195,6 +203,27 @@ public class TouchInput : MonoBehaviour {
         audioSource.enabled = false;
         isFiring = false;
 
+    }
+
+    public void ToggleSFX()
+    {
+        if (SFXToggled == true)
+        {
+            foreach (var audio in SFXSources)
+            {
+                SFXToggled = false;
+                audio.enabled = false;
+            }
+        }
+        else if (SFXToggled == false)
+        {
+            foreach (var audio in SFXSources)
+            {
+                SFXToggled = true;
+                audio.enabled = true;
+                
+            }
+        }
     }
 
     private GameObject GetEnemy()
