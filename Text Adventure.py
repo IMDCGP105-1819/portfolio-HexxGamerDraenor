@@ -1,82 +1,111 @@
-import cmd
-import random
-import textwrap
 import sys
-import os
+import random
 import time
+import Text_Adventure_Descriptions
 
-most_recent_choice = ""
+def quick_end():
+    print("You went back home, into bed, and slept. such adventure, right?")
+    input("hit enter to quit.")
 
-
-commands = ["north", "east", "south", "west"]
-
-def check_input():
-    choice = input("> ")
-    while choice not in commands:
-        print("input error, try again")
-        choice = input("> ")
-    else:
-        if choice == "north":
-            print("heading north")
-        elif choice == "south":
-            print("heading south")
-        elif choice == "west":
-            print("heading west")
-        elif choice == "east":
-            print("heading east")
-        most_recent_choice = str(choice)
-        
-    
 def start_game():
-    #start the game!
-    print("You start on a journey through a glade        ")
-    time.sleep(2)
-    print("returning from a grocery run in the market    ")
-    time.sleep(2)    
-    print("you carry with you a basket of bread          ")
-    time.sleep(2)
-    print("a pitcher of milk and a dozen eggs            ")
-    time.sleep(2)
-    print()
-    print("your home is NORTH, the market is SOUTH       ")
-    print()
-    #input check
-    check_input()
-    
+    #start game here
+    print("game started")
+    Text_Adventure_Descriptions.fancy_wait()
+    Text_Adventure_Descriptions.start_desc()
+    selection = input("> ")
+    if selection == "north":
+        #go into glade here
+        print("moving into the glade...")
+        Text_Adventure_Descriptions.fancy_wait()
+        Text_Adventure_Descriptions.enter_glade()
+        Glade_intro()
+    elif selection == "south":
+        quick_end()
+    while selection not in ["south", "north"]:
+        print("Try again")
+        selection = input("> ")
+        if selection == "north":
+            #go into glade here
+            print("moving into the glade...")
+            Text_Adventure_Descriptions.fancy_wait()
+            Text_Adventure_Descriptions.enter_glade()
+        elif selection == "south":
+            quick_end()
 
-def title_screen_selections():
-    option = input("> ")
-    if option.lower() == ("play"):
-       start_game()
-    elif option.lower() == ("help"):
-        help_menu()
-    elif option.lower() == ("quit"):
-        sys.exit()
-    while option.lower() not in ["play", "help", "quit"]:
-        print("Input correct shite")
-        option = input("> ")
-        if option.lower() == ("play"):
-            start_game()
-        elif option.lower() == ("help"):
-            help_menu()
-        elif option.lower() == ("quit"):
-            sys.exit()
+def Glade_intro():
+    selection = input("> ")
+    if selection == "east":
+        Text_Adventure_Descriptions.fancy_wait()
+        Text_Adventure_Descriptions.bright_path()
+    elif selection == "west":
+        Text_Adventure_Descriptions.fancy_wait()
+        Text_Adventure_Descriptions.dark_path()
+        my_dark_path()
+    elif selection == "quit":
+        sys.exit
+    while selection not in ["east", "west", "quit"]:
+        print("Try again")
+        selection = input("> ")
+        if selection == "east":
+            Text_Adventure_Descriptions.fancy_wait()
+            Text_Adventure_Descriptions.bright_path()
+        elif selection == "west":
+            Text_Adventure_Descriptions.fancy_wait()
+            Text_Adventure_Descriptions.dark_path()
+            my_dark_path()
+        elif selection == "quit":
+            sys.exit
 
-def title_screen():
-    print("~~~~~~~~~~~~~~~~~~~")
-    print("    Welcome        ")
-    print("~~~~~~~~~~~~~~~~~~~")
-    print("   - Play -      \t")
-    print("   - Help -      \t")
-    print("   - Quit -      \t")
-    title_screen_selections()
+def my_dark_path():
+    selection = "> "
+    if selection == "yes":
+        Text_Adventure_Descriptions.fancy_wait()
+        Text_Adventure_Descriptions.open_chest()
+        my_open_chest()
+    elif selection == "no":
+        Text_Adventure_Descriptions.no_chest()
+    elif selection == "quit":
+        sys.exit
+    while selection not in ["yes", "no", "quit"]:
+        print("Try again")
+        selection = "> "
+        if selection == "yes":
+            Text_Adventure_Descriptions.fancy_wait()
+            Text_Adventure_Descriptions.open_chest()
+            my_open_chest()
+        elif selection == "no":
+            Text_Adventure_Descriptions.no_chest()
+        elif selection == "quit":
+            sys.exit
+
+def my_open_chest():
+    Text_Adventure_Descriptions.open_chest()
 
 def help_menu():
-    print()
-    print("            ###  HELP  ###                    ")
-    print("    All keywords you shall see are in caps    ")
-    print("use lowercase to type any keywords or commands")
-    print()
-    title_screen_selections()
+    #help menu
+    print("for commands, use lowercase syntax, otherwise you're a massive screw up")
+    start_menu()
 
-title_screen()
+def start_menu():
+    print("     MENU     ")
+    print("~~~~ Play ~~~~")
+    print("~~~~ Help ~~~~")
+    print("~~~~ Quit ~~~~")
+    selection = input("> ")
+    if selection == "play":
+        start_game()
+    elif selection == "help":
+        help_menu()
+    elif selection == "quit":
+        sys.exit
+    while selection not in ["play", "help", "quit"]:
+        print("Input wrong, try again")
+        selection = input("> ")
+        if selection == "play":
+            start_game()
+        elif selection == "help":
+            help_menu()
+        elif selection == "quit":
+            sys.exit
+        
+start_menu()
