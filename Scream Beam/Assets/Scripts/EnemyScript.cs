@@ -18,10 +18,15 @@ public class EnemyScript : MonoBehaviour {
 
     public Image healthBar;
 
-    public TouchInput player;
-    public GameObject beamRenderer1;
-    public GameObject beamRenderer2;
-    public AudioSource AudioSource;
+    private TouchInput player;
+    private GameObject beamRenderer1;
+    private GameObject beamRenderer2;
+    private AudioSource AudioSource;
+
+    [SerializeField]
+    private SpriteRenderer mySprite;
+    [SerializeField]
+    private GameObject myCanvas;
 	// Use this for initialization
 	void Start () {
         timer = Time.time;
@@ -39,7 +44,7 @@ public class EnemyScript : MonoBehaviour {
         {
             StopCoroutine("MoveTheEnemy");
             AddScore();
-            this.gameObject.SetActive(false);
+            StartCoroutine("DeathSequence");
         }
 
 
@@ -58,7 +63,7 @@ public class EnemyScript : MonoBehaviour {
         //check for beam touching, if true do damage
         if (isInBeam && beamRenderer1.activeInHierarchy == true && player.isFiring == true || isInBeam && beamRenderer2.activeInHierarchy == true && player.isFiring == true)
         {
-            enemyCurHealth -=  player.dmgMod * Time.deltaTime * 35;
+            enemyCurHealth -= player.dmgMod;
         }
         else
         {
@@ -81,6 +86,28 @@ public class EnemyScript : MonoBehaviour {
     {
         Enemy.AddForce(Vector3.down * moveAmount, ForceMode2D.Impulse);
         yield return new WaitForSeconds(timerResetTime);
+
+        int choice = Random.Range(1, 6);
+
+        switch(choice)
+        {
+            case 5:
+                Enemy.AddForce(Vector3.right * moveAmount * 10, ForceMode2D.Impulse);
+                yield break;
+            case 6:
+                Enemy.AddForce(Vector3.right * moveAmount * 10, ForceMode2D.Impulse);
+                yield break;
+        }
+    }
+
+    IEnumerator DeathSequence()
+    {
+        myCanvas.SetActive(false);
+        mySprite.enabled = false;
+        GetComponent<AudioSource>().Play();
+        yield return new WaitForSeconds(0.4f);
+        this.gameObject.SetActive(false);
+        StopCoroutine("DeathSequence");
     }
 
     //on trigger enter, toggle beam activity
@@ -123,6 +150,8 @@ public class EnemyScript : MonoBehaviour {
     void OnEnable()
     {
         enemyCurHealth = maxHealth;
+        myCanvas.SetActive(true);
+        mySprite.enabled = true;
     }
 
     void AddScore()
@@ -133,6 +162,7 @@ public class EnemyScript : MonoBehaviour {
     //death by planet incurs no score addition
     public void PlanetKill()
     {
+        StartCoroutine("DeathSequence");
         this.gameObject.SetActive(false);
     }
 }

@@ -24,8 +24,6 @@ public class MenuController : MonoBehaviour {
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
 
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-
         //menu startup
         BootMenu.gameObject.SetActive(true);
         NameMenu.gameObject.SetActive(false);
@@ -44,8 +42,7 @@ public class MenuController : MonoBehaviour {
         //if in main game get name text obj and apply playername
         if(SceneManager.GetActiveScene().name == SceneToLoad)
         {
-            GameObject nameText = GameObject.Find("NameText");
-            nameText.GetComponent<TextMeshProUGUI>().text = playerName;
+            setName();
         }
 
         if(BootMenu == null)
@@ -53,6 +50,12 @@ public class MenuController : MonoBehaviour {
             return;
         }
 	}
+
+    void setName()
+    {
+        GameObject nameText = GameObject.Find("NameText");
+        nameText.GetComponent<TextMeshProUGUI>().text = playerName;
+    }
 
     //Functions for starting game and exitting .exe
     public void StartGame()

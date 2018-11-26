@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class TouchInput : MonoBehaviour {
     [Header("Shooting Parameters")]
@@ -11,12 +11,13 @@ public class TouchInput : MonoBehaviour {
     public SpriteRenderer BeamRenderer;
     public AudioSource audioSource;
     public Transform BeamOrigin;
+    public Slider fuelSlider;
     public float maxTimer;
     public float timer;
     public bool isFiring = false;
-
-    public float BeamRadius;
-    public float BeamDistance;
+    public float maxFuel = 10;
+    public float curFuel;
+    private bool canRegen = false;
     [Range(15, 40)]
     public float dmgMod;
     [Header("Movement Parameters")]
@@ -44,11 +45,25 @@ public class TouchInput : MonoBehaviour {
     public Transform pauseMenuCanvas;
     public bool isPaused;
 
-    private bool SFXToggled = false;
-    public AudioSource[] SFXSources;
+    [Header("Power up Parameters")]
+    public Vector3 minDist;
+
+    public int maxCanisters = 2;
+    public float maxCanisterSpawnRate;
+    public float CanisterSpawnRate;
+    public GameObject[] Canisters;
+    public Transform CanisterSpawn;
+    public GameObject CanisterPrefab;
+
+    public GameObject depletedPU1;
+    public GameObject PU1;
 
     void Start()
     {
+        //set fuel slider base values
+        curFuel = maxFuel;
+        fuelSlider.maxValue = maxFuel;
+        fuelSlider.value = curFuel;
         timer = maxTimer;
 
         //create prefab enemies for later use
@@ -58,14 +73,38 @@ public class TouchInput : MonoBehaviour {
             enemies[i].SetActive(false);
         }
 
+        //create canisters
+        CanisterSpawnRate = maxCanisterSpawnRate;
+        for (int i = 0; i < maxCanisters; i++)
+        {
+            Canisters[i] = Instantiate(CanisterPrefab, CanisterSpawn.position, transform.rotation);
+            Canisters[i].SetActive(false);
+        }
         //grab playerprefs values
         highScore = PlayerPrefs.GetInt("HighScore");
-        playerName = GameObject.Find("GameController").GetComponent<MenuController>().playerName;
+
+        var gamecontrol = GameObject.Find("GameController");
+        string myPlayerName = "null";
+
+        if ( gamecontrol )
+            myPlayerName = gamecontrol.GetComponent<MenuController>().playerName;
+
+        if(myPlayerName == null)
+        {
+            myPlayerName = "nulled exception";
+            playerName = myPlayerName;
+        }
+        else
+        {
+            playerName = myPlayerName;
+            return;
+        }
     }
 
     void Update() {
+        fuelSlider.value = curFuel;
         //if score is beaten, apply new changes for later reference, save to PlayerPrefs
-        if(Score > highScore)
+        if (Score > highScore)
         {
             PlayerPrefs.SetInt("Highscore", Score);
             PlayerPrefs.SetString("Leader", playerName);
@@ -93,6 +132,8 @@ public class TouchInput : MonoBehaviour {
         //firing check
         if(isFiring == true)
         {
+            curFuel -= Time.deltaTime;
+            canRegen = false;
             if (timer >= maxTimer / 2 && isFiring == true)
             {
                 BeamRenderer.enabled = true;
@@ -109,11 +150,42 @@ public class TouchInput : MonoBehaviour {
                 timer = maxTimer;
             }
         }
+        if(canRegen)
+        {
+            curFuel += Time.deltaTime;
+            if(curFuel > maxFuel)
+            {
+                curFuel = maxFuel;
+            }
+        }
 
         //pause menu check for pc
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             PauseSwitch();
+        }
+        if(curFuel <= 0)
+        {
+            ReleaseFire();
+        }
+
+        //canister spawning timer
+        CanisterSpawnRate -= Time.deltaTime;
+        if(CanisterSpawnRate <= 0)
+        {
+            SpawnCanister();
+        }
+
+        //fuel image control
+        if(curFuel < maxFuel / 6)
+        {
+            depletedPU1.SetActive(true);
+            PU1.SetActive(false);
+        }
+        else
+        {
+            depletedPU1.SetActive(false);
+            PU1.SetActive(true);
         }
     }
 
@@ -130,17 +202,6 @@ public class TouchInput : MonoBehaviour {
             pauseMenuCanvas.gameObject.SetActive(true);
             Time.timeScale = 0;
         }
-    }
-
-    public void ResumeGame()
-    {
-        pauseMenuCanvas.gameObject.SetActive(false);
-        Time.timeScale = 1;
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
 
     private void SpawnChoice()
@@ -186,14 +247,36 @@ public class TouchInput : MonoBehaviour {
         willSpawn = true;
     }
 
+    public void SpawnCanister()
+    {
+        GameObject newCanister = GetFuelCanister();
+        if (newCanister != null)
+        {
+            //set canister to active, put in location
+            newCanister.SetActive(true);
+            newCanister.transform.SetPositionAndRotation(CanisterSpawn.position, Quaternion.identity);
+        }
+        CanisterSpawnRate = maxCanisterSpawnRate;
+    }
+
+    private IEnumerator FuelRegen()
+    {
+        yield return new WaitForSeconds(1);
+        if (curFuel != maxFuel)
+        {
+            canRegen = true;
+        }
+        StopCoroutine("FuelRegen");
+    }
+
     public void Fire()
     {
-        BeamRenderer.enabled = true;
-        if (SFXToggled == true)
+        StopCoroutine("FuelRegen");
+        if (curFuel > 0)
         {
-            audioSource.enabled = true;
+            BeamRenderer.enabled = true;
+            isFiring = true;
         }
-        isFiring = true;
     }
 
     public void ReleaseFire()
@@ -202,28 +285,7 @@ public class TouchInput : MonoBehaviour {
         Beam2Sprite.enabled = false;
         audioSource.enabled = false;
         isFiring = false;
-
-    }
-
-    public void ToggleSFX()
-    {
-        if (SFXToggled == true)
-        {
-            foreach (var audio in SFXSources)
-            {
-                SFXToggled = false;
-                audio.enabled = false;
-            }
-        }
-        else if (SFXToggled == false)
-        {
-            foreach (var audio in SFXSources)
-            {
-                SFXToggled = true;
-                audio.enabled = true;
-                
-            }
-        }
+        StartCoroutine("FuelRegen");
     }
 
     private GameObject GetEnemy()
@@ -234,6 +296,28 @@ public class TouchInput : MonoBehaviour {
             if(!enemies[i].activeSelf)
             {
                 return enemies[i];
+            }
+        }
+        return null;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "FuelCanister" && col.transform.position.y < 1200)
+        {
+            curFuel = maxFuel;
+            col.gameObject.SetActive(false);
+        }
+    }
+
+    private GameObject GetFuelCanister()
+    {
+        //setFuelCanisters
+        for (int i = 0; i < maxCanisters; i++)
+        {
+            if(!Canisters[i].activeSelf)
+            {
+                return Canisters[i];
             }
         }
         return null;
