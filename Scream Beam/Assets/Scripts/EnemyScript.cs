@@ -27,7 +27,7 @@ public class EnemyScript : MonoBehaviour {
     private SpriteRenderer mySprite;
     [SerializeField]
     private GameObject myCanvas;
-	// Use this for initialization
+
 	void Start () {
         timer = Time.time;
         enemyCurHealth = maxHealth;
@@ -35,7 +35,6 @@ public class EnemyScript : MonoBehaviour {
         player = GameObject.Find("Player").GetComponent<TouchInput>();
 	}
 	
-	// Update is called once per frame
 	void Update () {
         healthBar.fillAmount = enemyCurHealth / 100;
 
@@ -145,6 +144,14 @@ public class EnemyScript : MonoBehaviour {
         beamRenderer2 = null;
         AudioSource = null;
         isInBeam = false;
+    }
+
+    void OnColliderEnter2D(Collider2D col)
+    {
+        if(col.gameObject.tag == "Player")
+        {
+            PlanetKill();
+        }
     }
 
     void OnEnable()

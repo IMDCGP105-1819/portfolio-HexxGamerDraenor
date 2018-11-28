@@ -30,8 +30,11 @@ public class Planet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        //enemy in collider, kill it and reduce hp accordingly
-        curPlanetHP -= 10;
-        col.GetComponent<EnemyScript>().PlanetKill();
+        //enemy in collider, kill it and reduce hp accordingly#
+        if (col.gameObject.tag == "Enemy")
+        {
+            curPlanetHP -= 10;
+            col.GetComponent<EnemyScript>().PlanetKill();
+        }
     }
 }

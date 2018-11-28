@@ -46,7 +46,7 @@ public class TouchInput : MonoBehaviour {
     public bool isPaused;
 
     [Header("Power up Parameters")]
-    public Vector3 minDist;
+    public float minDist;
 
     public int maxCanisters = 2;
     public float maxCanisterSpawnRate;
@@ -57,6 +57,13 @@ public class TouchInput : MonoBehaviour {
 
     public GameObject depletedPU1;
     public GameObject PU1;
+
+    public int maxBombs = 1;
+    public float maxBombSpawnRate;
+    public float BombSpawnRate;
+    public GameObject[] Bombs;
+    public Transform BombSpawn;
+    public GameObject BombPrefab;
 
     void Start()
     {
@@ -79,6 +86,13 @@ public class TouchInput : MonoBehaviour {
         {
             Canisters[i] = Instantiate(CanisterPrefab, CanisterSpawn.position, transform.rotation);
             Canisters[i].SetActive(false);
+        }
+
+        BombSpawnRate = maxBombSpawnRate;
+        for(int i = 0; i < maxBombs; i++)
+        {
+            Bombs[i] = Instantiate(BombPrefab, BombSpawn.position, transform.rotation);
+            Bombs[i].SetActive(false);
         }
         //grab playerprefs values
         highScore = PlayerPrefs.GetInt("HighScore");
@@ -168,6 +182,14 @@ public class TouchInput : MonoBehaviour {
         {
             ReleaseFire();
         }
+        if(Input.GetButtonDown("Fire1"))
+        {
+            Fire();
+        }
+        if(Input.GetButtonUp("Fire1"))
+        {
+            ReleaseFire(); 
+        }
 
         //canister spawning timer
         CanisterSpawnRate -= Time.deltaTime;
@@ -175,9 +197,14 @@ public class TouchInput : MonoBehaviour {
         {
             SpawnCanister();
         }
-
+        //bomb spawning timer
+        BombSpawnRate -= Time.deltaTime;
+        if (BombSpawnRate <= 0)
+        {
+            SpawnBomb();
+        }
         //fuel image control
-        if(curFuel < maxFuel / 6)
+        if (curFuel < maxFuel / 6)
         {
             depletedPU1.SetActive(true);
             PU1.SetActive(false);
@@ -259,6 +286,18 @@ public class TouchInput : MonoBehaviour {
         CanisterSpawnRate = maxCanisterSpawnRate;
     }
 
+    public void SpawnBomb()
+    {
+        GameObject newBomb = GetBomb();
+        if(newBomb != null)
+        {
+            //set active, reset loc
+            newBomb.SetActive(true);
+            newBomb.transform.SetPositionAndRotation(BombSpawn.position, Quaternion.identity);
+        }
+        BombSpawnRate = maxBombSpawnRate;
+    }
+
     private IEnumerator FuelRegen()
     {
         yield return new WaitForSeconds(1);
@@ -301,11 +340,29 @@ public class TouchInput : MonoBehaviour {
         return null;
     }
 
+    private GameObject GetBomb()
+    {
+        for (int i = 0; i < maxBombs; i++)
+        {
+            if(!Bombs[i].activeSelf)
+            {
+                return Bombs[i];
+            }
+        }
+        return null;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "FuelCanister" && col.transform.position.y < 1200)
+        if (col.gameObject.tag == "FuelCanister" && col.transform.position.y < minDist)
         {
             curFuel = maxFuel;
+            col.gameObject.SetActive(false);
+        }
+
+        else if (col.gameObject.tag == "Bomb" && col.transform.position.y < minDist)
+        {
+            col.GetComponent<Bomb>().Explode();
             col.gameObject.SetActive(false);
         }
     }
