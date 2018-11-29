@@ -1,15 +1,24 @@
 import sys
-import random
-import time
 import Text_Adventure_Descriptions
+
+my_name = ""
+
+class Player(object):
+    def __init__(self, my_name):
+        self.name = my_name
 
 def quick_end():
     print("You went back home, into bed, and slept. such adventure, right?")
     input("hit enter to quit.")
 
+def kill_me():
+    Text_Adventure_Descriptions.death_random(my_name)
+
 def start_game():
     #start game here
-    print("game started")
+    my_name = input("TYPE YOUR NAME > ")
+    Text_Adventure_Descriptions.my_name_ = my_name
+    print("game started\n")
     Text_Adventure_Descriptions.fancy_wait()
     Text_Adventure_Descriptions.start_desc()
     selection = input("> ")
@@ -21,7 +30,9 @@ def start_game():
         Glade_intro()
     elif selection == "south":
         quick_end()
-    while selection not in ["south", "north"]:
+    elif selection == "killme":
+        kill_me()
+    while selection not in ["south", "north", "killme"]:
         print("Try again")
         selection = input("> ")
         if selection == "north":
@@ -31,12 +42,14 @@ def start_game():
             Text_Adventure_Descriptions.enter_glade()
         elif selection == "south":
             quick_end()
+        elif selection == "killme":
+            kill_me()
 
 def Glade_intro():
     selection = input("> ")
     if selection == "east":
         Text_Adventure_Descriptions.fancy_wait()
-        Text_Adventure_Descriptions.bright_path()
+        Text_Adventure_Descriptions.death_random(my_name)
     elif selection == "west":
         Text_Adventure_Descriptions.fancy_wait()
         Text_Adventure_Descriptions.dark_path()
@@ -48,7 +61,7 @@ def Glade_intro():
         selection = input("> ")
         if selection == "east":
             Text_Adventure_Descriptions.fancy_wait()
-            Text_Adventure_Descriptions.bright_path()
+            Text_Adventure_Descriptions.death_random(my_name)
         elif selection == "west":
             Text_Adventure_Descriptions.fancy_wait()
             Text_Adventure_Descriptions.dark_path()
@@ -57,13 +70,13 @@ def Glade_intro():
             sys.exit
 
 def my_dark_path():
-    selection = "> "
+    selection = input("> ")
     if selection == "yes":
         Text_Adventure_Descriptions.fancy_wait()
         Text_Adventure_Descriptions.open_chest()
         my_open_chest()
     elif selection == "no":
-        Text_Adventure_Descriptions.no_chest()
+        Text_Adventure_Descriptions.death_random(my_name)
     elif selection == "quit":
         sys.exit
     while selection not in ["yes", "no", "quit"]:
@@ -71,10 +84,9 @@ def my_dark_path():
         selection = "> "
         if selection == "yes":
             Text_Adventure_Descriptions.fancy_wait()
-            Text_Adventure_Descriptions.open_chest()
             my_open_chest()
         elif selection == "no":
-            Text_Adventure_Descriptions.no_chest()
+            Text_Adventure_Descriptions.death_random(my_name)
         elif selection == "quit":
             sys.exit
 
