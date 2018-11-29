@@ -2406,8 +2406,8 @@ MonoBehaviour:
   depletedPU1: {fileID: 5878871}
   PU1: {fileID: 1389773961}
   maxBombs: 1
-  maxBombSpawnRate: 1
-  BombSpawnRate: 1
+  maxBombSpawnRate: 0
+  BombSpawnRate: 0
   Bombs:
   - {fileID: 0}
   BombSpawn: {fileID: 294978472}

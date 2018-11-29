@@ -33,8 +33,13 @@ public class Planet : MonoBehaviour {
         //enemy in collider, kill it and reduce hp accordingly#
         if (col.gameObject.tag == "Enemy")
         {
-            curPlanetHP -= 10;
-            col.GetComponent<EnemyScript>().PlanetKill();
+            ReduceHealth(col);
         }
+    }
+
+    public void ReduceHealth(Collider2D col)
+    {
+        curPlanetHP -= 10;
+        col.GetComponent<EnemyScript>().PlanetKill();
     }
 }

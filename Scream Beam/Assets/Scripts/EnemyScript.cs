@@ -27,12 +27,14 @@ public class EnemyScript : MonoBehaviour {
     private SpriteRenderer mySprite;
     [SerializeField]
     private GameObject myCanvas;
+    public Planet myPlanet;
 
 	void Start () {
         timer = Time.time;
         enemyCurHealth = maxHealth;
         healthBar.fillAmount = enemyCurHealth / 10;
         player = GameObject.Find("Player").GetComponent<TouchInput>();
+        myPlanet = GameObject.Find("PlanetManager").GetComponent<Planet>();
 	}
 	
 	void Update () {
@@ -146,11 +148,12 @@ public class EnemyScript : MonoBehaviour {
         isInBeam = false;
     }
 
-    void OnColliderEnter2D(Collider2D col)
+    void OnCollisionEnter2D(Collision2D col)
     {
+        Debug.Log("HIT A THING");
         if(col.gameObject.tag == "Player")
         {
-            PlanetKill();
+            myPlanet.ReduceHealth(this.gameObject.GetComponent<Collider2D>());
         }
     }
 
