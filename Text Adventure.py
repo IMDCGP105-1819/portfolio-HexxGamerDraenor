@@ -9,7 +9,7 @@ def quick_end():
 
 def start_game():
     #start game here
-    print("game started")
+    print("game started\n")
     Text_Adventure_Descriptions.fancy_wait()
     Text_Adventure_Descriptions.start_desc()
     selection = input("> ")
@@ -57,13 +57,13 @@ def Glade_intro():
             sys.exit
 
 def my_dark_path():
-    selection = "> "
+    selection = input("> ")
     if selection == "yes":
         Text_Adventure_Descriptions.fancy_wait()
         Text_Adventure_Descriptions.open_chest()
         my_open_chest()
     elif selection == "no":
-        Text_Adventure_Descriptions.no_chest()
+        Text_Adventure_Descriptions.death_random()
     elif selection == "quit":
         sys.exit
     while selection not in ["yes", "no", "quit"]:
@@ -71,10 +71,9 @@ def my_dark_path():
         selection = "> "
         if selection == "yes":
             Text_Adventure_Descriptions.fancy_wait()
-            Text_Adventure_Descriptions.open_chest()
             my_open_chest()
         elif selection == "no":
-            Text_Adventure_Descriptions.no_chest()
+            Text_Adventure_Descriptions.death_random()
         elif selection == "quit":
             sys.exit
 

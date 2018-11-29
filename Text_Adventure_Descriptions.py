@@ -1,7 +1,7 @@
 import time
 import random
 
-fancy_wait_timer = 0.2
+fancy_wait_timer = 0.4
 
 def fancy_wait():
     time.sleep(fancy_wait_timer)
@@ -55,16 +55,57 @@ def open_chest():
     time.sleep(1)
     print("Gratz. you won.")
 
-def no_chest():
-    death_random()
-
 def death_random():
-    my_death = random.random()
+    my_death = random.randrange(1, 4)
     if my_death < 0.25:
         print("You got stabbed.")
+        input("enter to exit")
     elif 0.25 <= my_death < 0.5:
         print("A dragon swooped down and ate you. Fantasy game.")
+        input("enter to exit")
     elif 0.5 <= my_death < 0.75:
         print("A goblin runs up behind you, mistakes you for it's girlfriend, marries you forceably, hits you over the head with a mallet, and you wind up pregnant. This is your life now.")
+        input("enter to exit")
+    elif 1 <= my_death < 1.25:
+        print("So an ogre notices you're trespassing, stands on you, notices you're still alive somehow, picks you up, sticks you to his boot, and walks for 6 miles")
+        print("(6 ogre steps), making sure you're well and truly fucked.")
+        input("enter to exit")
+    elif 1.25 <= my_death < 1.5:
+        print("Anda meninggal.")
+        input("enter to exit")
+    elif 1.5 <= my_death < 1.75:
+        print("chi wedi marw.")
+        input("enter to exit")
+    elif 1.75 <= my_death < 2:
+        print("you stepped...on a landmine...how??? what???")
+        input("enter to exit")
+    elif 2 <= my_death < 2.25:
+        print("omae wa...mo shinderu")
+        input("enter to exit")
+    elif 2.25 <= my_death < 2.5:
+        print("YOU DISCOVER YOU'RE A GOD AND ASCEND TO THE HEAVENS TO MEET WITH YOUR FATHER ODIN AND RIDE THE JORMUNGARDR TILL THE DAY YOU DIE IN GLORIOUS BATTLE(jk you died)")
+        input("enter to exit")
+    elif 2.75 <= my_death < 3:
+        print("you got crushed by a mountain. yes a mountain. because life isn't easy.")
+        input("enter to exit")
+    elif 3 <= my_death < 3.25:
+        print("you get bogged down by all the assignments you have to do for uni and get severely depressed, you spend the rest of your life sleeping and taking medication. true story.")
+        input("enter to exit")
+    elif 3.25 <= my_death < 3.5:
+        print("a random nuke goes off 3 feet from you. no idea how or why, but it happened. you died.")
+        input("enter to exit")
+    elif 3.5 <= my_death < 3.75:
+        print("YOU WIN")
+        time.sleep(4)
+        print("jk you died")
+        input("enter to exit")
+    elif 3.75 <= my_death < 4:
+        print("YOU")
+        time.sleep(1)
+        print("FUCKIN")
+        time.sleep(1)
+        print("DIED")
+        input("enter to exit")
     else:
         print("insert creative death.")
+        input("enter to exit")
