@@ -3,6 +3,8 @@ import random
 
 fancy_wait_timer = 1
 
+def win_thing():
+    input("press enter to exit")
 def fancy_wait():
     time.sleep(fancy_wait_timer)
     print(".")
