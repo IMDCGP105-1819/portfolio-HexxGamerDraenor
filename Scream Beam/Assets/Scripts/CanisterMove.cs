@@ -5,9 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CanisterMove : MonoBehaviour {
     public float moveSpeed;
-    public int choice;
+    private int choice;
     public float maxTimer = 2;
-    public float timer;
+    private float timer;
     private bool canDoStuff = false;
 
     void OnEnable()

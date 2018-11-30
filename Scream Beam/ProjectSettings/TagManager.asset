@@ -8,6 +8,7 @@ TagManager:
   - Beam
   - FuelCanister
   - Bomb
+  - Powerup
   layers:
   - Default
   - TransparentFX

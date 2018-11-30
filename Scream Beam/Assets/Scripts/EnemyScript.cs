@@ -150,7 +150,6 @@ public class EnemyScript : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("HIT A THING");
         if(col.gameObject.tag == "Player")
         {
             myPlanet.ReduceHealth(this.gameObject.GetComponent<Collider2D>());

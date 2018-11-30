@@ -58,13 +58,6 @@ public class TouchInput : MonoBehaviour {
     public GameObject depletedPU1;
     public GameObject PU1;
 
-    public int maxBombs = 1;
-    public float maxBombSpawnRate;
-    public float BombSpawnRate;
-    public GameObject[] Bombs;
-    public Transform BombSpawn;
-    public GameObject BombPrefab;
-
     void Start()
     {
         //set fuel slider base values
@@ -88,15 +81,10 @@ public class TouchInput : MonoBehaviour {
             Canisters[i].SetActive(false);
         }
 
-        BombSpawnRate = maxBombSpawnRate;
-        for(int i = 0; i < maxBombs; i++)
-        {
-            Bombs[i] = Instantiate(BombPrefab, BombSpawn.position, transform.rotation);
-            Bombs[i].SetActive(false);
-        }
         //grab playerprefs values
         highScore = PlayerPrefs.GetInt("HighScore");
 
+        //playername bypass
         var gamecontrol = GameObject.Find("GameController");
         string myPlayerName = "null";
 
@@ -114,7 +102,6 @@ public class TouchInput : MonoBehaviour {
             return;
         }
     }
-
     void Update() {
         fuelSlider.value = curFuel;
         //if score is beaten, apply new changes for later reference, save to PlayerPrefs
@@ -197,12 +184,6 @@ public class TouchInput : MonoBehaviour {
         {
             SpawnCanister();
         }
-        //bomb spawning timer
-        BombSpawnRate -= Time.deltaTime;
-        if (BombSpawnRate <= 0)
-        {
-            SpawnBomb();
-        }
         //fuel image control
         if (curFuel < maxFuel / 6)
         {
@@ -215,7 +196,6 @@ public class TouchInput : MonoBehaviour {
             PU1.SetActive(true);
         }
     }
-
     public void PauseSwitch()
     {
         if(pauseMenuCanvas.gameObject.activeInHierarchy == true)
@@ -230,7 +210,6 @@ public class TouchInput : MonoBehaviour {
             Time.timeScale = 0;
         }
     }
-
     private void SpawnChoice()
     {
         //check for a random spawn location
@@ -257,7 +236,6 @@ public class TouchInput : MonoBehaviour {
                 return;
         }  
     }
-
     private IEnumerator SpawnEnemy()
     {
         willSpawn = false;
@@ -273,7 +251,6 @@ public class TouchInput : MonoBehaviour {
         yield return new WaitForSeconds(SpawnRate);
         willSpawn = true;
     }
-
     public void SpawnCanister()
     {
         GameObject newCanister = GetFuelCanister();
@@ -285,19 +262,6 @@ public class TouchInput : MonoBehaviour {
         }
         CanisterSpawnRate = maxCanisterSpawnRate;
     }
-
-    public void SpawnBomb()
-    {
-        GameObject newBomb = GetBomb();
-        if(newBomb != null)
-        {
-            //set active, reset loc
-            newBomb.SetActive(true);
-            newBomb.transform.SetPositionAndRotation(BombSpawn.position, Quaternion.identity);
-        }
-        BombSpawnRate = maxBombSpawnRate;
-    }
-
     private IEnumerator FuelRegen()
     {
         yield return new WaitForSeconds(1);
@@ -307,7 +271,6 @@ public class TouchInput : MonoBehaviour {
         }
         StopCoroutine("FuelRegen");
     }
-
     public void Fire()
     {
         StopCoroutine("FuelRegen");
@@ -317,7 +280,6 @@ public class TouchInput : MonoBehaviour {
             isFiring = true;
         }
     }
-
     public void ReleaseFire()
     {
         BeamRenderer.enabled = false;
@@ -326,7 +288,6 @@ public class TouchInput : MonoBehaviour {
         isFiring = false;
         StartCoroutine("FuelRegen");
     }
-
     private GameObject GetEnemy()
     {
         //set enemies in for array
@@ -339,34 +300,14 @@ public class TouchInput : MonoBehaviour {
         }
         return null;
     }
-
-    private GameObject GetBomb()
-    {
-        for (int i = 0; i < maxBombs; i++)
-        {
-            if(!Bombs[i].activeSelf)
-            {
-                return Bombs[i];
-            }
-        }
-        return null;
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
+    void OnTriggerEnter2D(Collider2D col)      
     {
         if (col.gameObject.tag == "FuelCanister" && col.transform.position.y < minDist)
         {
             curFuel = maxFuel;
             col.gameObject.SetActive(false);
         }
-
-        else if (col.gameObject.tag == "Bomb" && col.transform.position.y < minDist)
-        {
-            col.GetComponent<Bomb>().Explode();
-            col.gameObject.SetActive(false);
-        }
     }
-
     private GameObject GetFuelCanister()
     {
         //setFuelCanisters

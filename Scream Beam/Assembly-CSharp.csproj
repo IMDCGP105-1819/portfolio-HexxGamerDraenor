@@ -54,7 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\explosion.cs" />
+    <Compile Include="Assets\ExplosionExecute.cs" />
     <Compile Include="Assets\Scripts\Bomb.cs" />
     <Compile Include="Assets\Scripts\CanisterMove.cs" />
     <Compile Include="Assets\Scripts\EnemyScript.cs" />
