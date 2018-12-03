@@ -1,0 +1,29 @@
+List of things to do for Scream Beam project:
+
+> Work out player input for Android
+
+> create document for reference
+
+> Work out player movement
+
+> design document submit
+
+> design startup menu with ui elements (instructions, buttons!)
+
+> create basic bibliography
+
+> Design basic level
+
+> design player sprite
+
+> design enemy sprite
+
+THINGS TO CHECK CONSTANTLY
+
+code commenting
+
+structure is neat
+
+GitHub commits are gud
+
+it's relevant

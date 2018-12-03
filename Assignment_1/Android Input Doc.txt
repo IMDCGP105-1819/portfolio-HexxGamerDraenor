@@ -1,0 +1,15 @@
+Notes taken off the Brakeys Mobile Input tutorial
+
+switch build target to Android
+
+pair with phone (Unity Remote)
+
+under Edit > Project Settings > Editor > Device ensure that device choice is selected
+
+UI elements work by default with touch
+
+if(Input.touchCount > 0)
+{
+	Touch touch = Input.GetTouch(0)
+	Camera.main.ScreenToWorldPoint(touch.position);
+}

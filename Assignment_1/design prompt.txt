@@ -1,0 +1,3 @@
+Basic game goal:
+
+defend your planet from the incoming <enemy name> that want to use it's resources for nefarious deeds!!!
