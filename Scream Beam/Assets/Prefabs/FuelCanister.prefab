@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 61357294404699482}
   m_Layer: 0
   m_Name: FuelCanister
-  m_TagString: FuelCanister
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 150
   maxTimer: 2
+  PowerupName: 
 --- !u!212 &212087100070915924
 SpriteRenderer:
   m_ObjectHideFlags: 1

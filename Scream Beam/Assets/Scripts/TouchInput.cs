@@ -58,6 +58,12 @@ public class TouchInput : MonoBehaviour {
     public GameObject depletedPU1;
     public GameObject PU1;
 
+    [Header("Bomb Parameters")]
+    public Image bombImage;
+    public float maxBombTimer = 10f;
+    private float curBombTimer;
+    public GameObject bombPrefab;
+    public Transform bombSpawn;
     void Start()
     {
         //set fuel slider base values
@@ -65,6 +71,9 @@ public class TouchInput : MonoBehaviour {
         fuelSlider.maxValue = maxFuel;
         fuelSlider.value = curFuel;
         timer = maxTimer;
+
+        //set bomb timer
+        curBombTimer = maxBombTimer;
 
         //create prefab enemies for later use
         for (int i = 0; i < maxEnemies; i++)
@@ -104,6 +113,19 @@ public class TouchInput : MonoBehaviour {
     }
     void Update() {
         fuelSlider.value = curFuel;
+        bombImage.fillAmount = curBombTimer / 20;
+
+        //bomb timer
+        if(curBombTimer < maxBombTimer)
+        {
+            curBombTimer += Time.deltaTime;
+        }
+
+        if(curBombTimer >= maxBombTimer)
+        {
+            curBombTimer = maxBombTimer;
+        }
+
         //if score is beaten, apply new changes for later reference, save to PlayerPrefs
         if (Score > highScore)
         {
@@ -302,7 +324,7 @@ public class TouchInput : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D col)      
     {
-        if (col.gameObject.tag == "FuelCanister" && col.transform.position.y < minDist)
+        if (col.gameObject.tag == "Powerup" && col.GetComponent<CanisterMove>().PowerupName == "Canister" && col.transform.position.y < minDist)
         {
             curFuel = maxFuel;
             col.gameObject.SetActive(false);
@@ -319,5 +341,13 @@ public class TouchInput : MonoBehaviour {
             }
         }
         return null;
+    }
+    public void FireBomb()
+    {
+        if (curBombTimer == maxBombTimer)
+        {
+            Instantiate(bombPrefab, bombSpawn.position, transform.rotation);
+            curBombTimer = 0;
+        }
     }
 }

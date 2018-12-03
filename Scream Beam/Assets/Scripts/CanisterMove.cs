@@ -9,10 +9,23 @@ public class CanisterMove : MonoBehaviour {
     public float maxTimer = 2;
     private float timer;
     private bool canDoStuff = false;
+    public string PowerupName;
+    private int PowerupChoice;
 
     void OnEnable()
     {
         canDoStuff = true;
+        PowerupChoice = Random.Range(1, 2);
+
+        switch(PowerupChoice)
+        {
+            case 1:
+                PowerupName = "Canister";
+                return;
+            case 2:
+                PowerupName = "Canister";
+                return;
+        }
     }
     void Update()
     {
@@ -24,6 +37,11 @@ public class CanisterMove : MonoBehaviour {
                 RandomMove();
                 timer = maxTimer;
             }
+        }
+
+        if(this.gameObject.transform.position.y < 150)
+        {
+            this.gameObject.SetActive(false);
         }
     }
     void RandomMove()
