@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine.UI;
 public class EnemyScript : MonoBehaviour {
     [Header("Movement Parameters")]
+    public float leftBoundary = 500;
+    public float rightBoundary = 2495;
     public float moveAmount = 0.2f;
     [SerializeField]
     private Rigidbody2D Enemy;
@@ -89,6 +91,21 @@ public class EnemyScript : MonoBehaviour {
         yield return new WaitForSeconds(timerResetTime);
 
         int choice = Random.Range(1, 6);
+
+        /*if(this.gameObject.transform.position.x <= leftBoundary + 40)
+        {
+            if(choice == 6)
+            {
+                choice = 5;
+            }
+        }
+        if(this.gameObject.transform.position.x <= rightBoundary - 40)
+        {
+            if(choice == 5)
+            {
+                choice = 6;
+            }
+        }*/
 
         switch(choice)
         {

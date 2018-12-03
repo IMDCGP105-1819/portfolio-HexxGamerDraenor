@@ -19,7 +19,7 @@ public class MenuController : MonoBehaviour {
 	void Start () {
         DontDestroyOnLoad(this.gameObject);
         //set highscore text to saved variables
-        HighScoreText.text = "Current Leader: " + PlayerPrefs.GetString("Leader") + ":" + PlayerPrefs.GetInt("Highscore").ToString();
+        HighScoreText.text = "Current Leader: " + PlayerPrefs.GetString("Leader") + ": " + PlayerPrefs.GetInt("Highscore").ToString();
         //set screen rotations to landscape values
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;

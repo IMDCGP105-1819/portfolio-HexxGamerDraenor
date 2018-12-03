@@ -113,7 +113,7 @@ public class TouchInput : MonoBehaviour {
     }
     void Update() {
         fuelSlider.value = curFuel;
-        bombImage.fillAmount = curBombTimer / 20;
+        bombImage.fillAmount = curBombTimer / 35;
 
         //bomb timer
         if(curBombTimer < maxBombTimer)
@@ -190,14 +190,6 @@ public class TouchInput : MonoBehaviour {
         if(curFuel <= 0)
         {
             ReleaseFire();
-        }
-        if(Input.GetButtonDown("Fire1"))
-        {
-            Fire();
-        }
-        if(Input.GetButtonUp("Fire1"))
-        {
-            ReleaseFire(); 
         }
 
         //canister spawning timer
