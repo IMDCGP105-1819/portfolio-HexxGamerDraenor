@@ -124,6 +124,7 @@ public class EnemyScript : MonoBehaviour {
         mySprite.enabled = false;
         GetComponent<AudioSource>().Play();
         yield return new WaitForSeconds(0.4f);
+        player.killCount++;
         this.gameObject.SetActive(false);
         StopCoroutine("DeathSequence");
     }

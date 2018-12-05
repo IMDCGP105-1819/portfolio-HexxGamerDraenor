@@ -30,11 +30,12 @@ public class TouchInput : MonoBehaviour {
     public GameObject[] enemies;
     public Transform spawnPos;
     public int maxEnemies;
+    public float maxSpawnRate;
     public float SpawnRate;
     private bool willSpawn = true;
     private int spawnChoice;
     public int maxSpawnPos;
-
+    public int killCount;
     [Header("Score Parameters")]
     public TextMeshProUGUI ScoreText;
     public int Score = 0;
@@ -152,6 +153,20 @@ public class TouchInput : MonoBehaviour {
                 (Input.GetAxis("Horizontal") * (moveSpeed * 100), joy.Vertical));
         }
 
+        //enemy difficulty gain
+        if(killCount < 10)
+        {
+            return;
+        }
+        else if (10 < killCount && killCount <= 20)
+        {
+            SpawnRate = maxSpawnRate - 2;
+        }
+        else if (20 < killCount && killCount <= 30)
+        {
+            SpawnRate = maxSpawnRate - 3;
+        }
+
         //firing check
         if(isFiring == true)
         {
@@ -210,6 +225,16 @@ public class TouchInput : MonoBehaviour {
             PU1.SetActive(true);
         }
     }
+
+    public void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.tag == "Powerup")
+        {
+            //Debug.Log("Powerup contact");
+            curFuel = maxFuel;
+            col.gameObject.SetActive(false);
+        }
+    }
     public void PauseSwitch()
     {
         if(pauseMenuCanvas.gameObject.activeInHierarchy == true)
@@ -262,7 +287,7 @@ public class TouchInput : MonoBehaviour {
             SpawnChoice();
             newEnemy.transform.SetPositionAndRotation(spawnPos.position, Quaternion.identity);
         }
-        yield return new WaitForSeconds(SpawnRate);
+        yield return new WaitForSeconds(maxSpawnRate);
         willSpawn = true;
     }
     public void SpawnCanister()
