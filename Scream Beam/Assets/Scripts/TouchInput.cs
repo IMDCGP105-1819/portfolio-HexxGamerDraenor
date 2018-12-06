@@ -312,6 +312,7 @@ public class TouchInput : MonoBehaviour {
     }
     public void Fire()
     {
+        audioSource.enabled = true;
         StopCoroutine("FuelRegen");
         if (curFuel > 0)
         {
