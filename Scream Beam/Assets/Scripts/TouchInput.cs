@@ -13,11 +13,11 @@ public class TouchInput : MonoBehaviour {
     public Transform BeamOrigin;
     public Slider fuelSlider;
     public float maxTimer;
-    public float timer;
+    private float timer;
     public bool isFiring = false;
     public float maxFuel = 10;
     public float curFuel;
-    private bool canRegen = false;
+    public bool canRegen = false;
     [Range(15, 40)]
     public float dmgMod;
     [Header("Movement Parameters")]
@@ -114,7 +114,7 @@ public class TouchInput : MonoBehaviour {
     }
     void Update() {
         fuelSlider.value = curFuel;
-        bombImage.fillAmount = curBombTimer / 35;
+        bombImage.fillAmount = curBombTimer / maxBombTimer;
 
         //bomb timer
         if(curBombTimer < maxBombTimer)
@@ -154,11 +154,7 @@ public class TouchInput : MonoBehaviour {
         }
 
         //enemy difficulty gain
-        if(killCount < 10)
-        {
-            return;
-        }
-        else if (10 < killCount && killCount <= 20)
+        if (10 < killCount && killCount <= 20)
         {
             SpawnRate = maxSpawnRate - 2;
         }
@@ -188,8 +184,9 @@ public class TouchInput : MonoBehaviour {
                 timer = maxTimer;
             }
         }
-        if(canRegen)
+        if(canRegen == true)
         {
+            //Debug.Log("Regen Active");
             curFuel += Time.deltaTime;
             if(curFuel > maxFuel)
             {
