@@ -57,10 +57,10 @@ def open_chest():
 def death_random(my_name):
     my_death = random.randrange(1, 4)
     if my_death < 0.25:
-        print("You got stabbed, ", my_name_, ".")
+        print("You got knocked unconscious and taken back to your home, ", my_name_, ".")
         input("enter to exit")
     elif 0.25 <= my_death < 0.5:
-        print("A dragon swooped down and ate you. Fantasy game.", my_name_)
+        print("A dragon swooped down and took you home. Fantasy game.", my_name_)
         input("enter to exit")
     elif 0.5 <= my_death < 0.75:
         print("A goblin runs up behind you, mistakes you for it's girlfriend, marries you forceably, hits you over the head with a mallet, and you wind up pregnant. This is your life now.", my_name_)
